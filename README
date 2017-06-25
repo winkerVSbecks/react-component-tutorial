@@ -1,0 +1,6 @@
+# React Component Tutorial
+
+$ npm install -g live-server
+$ live-server .
+
+open http://localhost:8080
