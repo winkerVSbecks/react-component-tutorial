@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body class="dark-gray sans-serif">
+    <article class="pa3 pa4-ns">
+      <h1 class="f3 f1-m f-headline-l">State 🔋</h1>
+
+      <ul class="list pl0 f3 lh-copy mb5">
+        <li class="mb2">Props (properties) are data passed into a component from a parent component</li>
+        <li>Used to dynamically change what a component renders or how it behaves</li>
+      </ul>
+
+      <table class="f6 w-100 mw7 mv5 code" cellspacing="0">
+        <thead>
+          <tr class="bg-near-white ttu tracked">
+            <th class="b f4 pv3">State</th>
+            <th class="b f4 pv3">Props</th>
+            <th class="b f4 pv3">Output</th>
+          </tr>
+        </thead>
+        <tbody class="lh-copy">
+          <tr>
+            <td class="tc pv3 f4">4</td>
+            <td class="tc pv3 f4">hour</td>
+            <td rowspan="3" class="tc pa0 f4">
+              <svg class="h-100 v-mid" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+                <path style="transform-origin: 50% 100%; transform: rotate(0.333turn);"
+                  d="M12,12 v-5" stroke-linecap="round" stroke="#2f7fe6" />
+                <path style="transform-origin: 50% 100%; transform: rotate(0.617turn);"
+                  d="M12,12 v-7" stroke-linecap="round" stroke="#2f7fe6" />
+                <path style="transform-origin: 50% 100%; transform: rotate(0.2turn);"
+                  d="M12,12 v-6" stroke-linecap="round" stroke="#f24949" stroke-width="0.5" />
+                <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+              </svg>
+            </td>
+          </tr>
+          <tr>
+            <td class="tc pv3 f4">37</td>
+            <td class="tc pv3 f4">minute</td>
+          </tr>
+          <tr>
+            <td class="tc pv3 f4">12</td>
+            <td class="tc pv3 f4">second</td>
+          </tr>
+        </tbody>
+      </table>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+    <link href="prism.css" rel="stylesheet" />
+  </head>
+  <body class="dark-gray sans-serif">
+    <article class="pa3 pa4-ns mb6">
+      <h1 class="f3 f1-m f-subheadline-l">Component Lifecycle 🔁</h1>
+
+      <p class="f3 lh-copy mb5 measure">
+        When a React component is rendered in the browser it goes through three lifecycle phases: mounted, update and unmounted.
+      </p>
+
+      <h2 class="f2 mt6">⏰ SVG O'clock</h2>
+      <div class="flex items-center">
+        <pre class="f3"><code class="language-js">const Clock = ({ hour, minute, second }) =&gt; (
+  &lt;svg className=&quot;dib w-50&quot; viewBox=&quot;0 0 24 24&quot;&gt;
+
+    &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;#343530&quot; fill=&quot;#f8faf9&quot; /&gt;
+
+    &lt;path d=&quot;M12,12 v-5&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+
+    &lt;path d=&quot;M12,12 v-7&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+
+    &lt;path d=&quot;M12,12 v-6&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#f24949&quot; strokeWidth=&quot;0.5&quot; /&gt;
+    &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.25&quot; fill=&quot;#f24949&quot; /&gt;
+
+  &lt;/svg&gt;
+);</code></pre>
+        <div class="flex-auto">
+          <svg class="db w4 h4 center" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+            <path d="M12,12 v-5" stroke-linecap="round" stroke="#2f7fe6" />
+            <path d="M12,12 v-7" stroke-linecap="round" stroke="#2f7fe6" />
+            <path d="M12,12 v-6" stroke-linecap="round" stroke="#f24949" stroke-width="0.5" />
+            <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="f2 mt6 flex items-center">
+        Refs and the DOM
+        <form class="ml3 dib" action="https://codepen.io/pen/define" method="POST" target="_blank">
+          <input id="js-clock-2" type="hidden" name="data" \>
+          <button class="bn pointer grow b br1 dark-blue bg-light-green inline-flex items-center tc pa3">
+            <img class="dib h1 w1" src="https://icon.now.sh/codepen/00449e" />
+            <span class="f6 ml2">Launch CodePen</span>
+          </button>
+        </form>
+      </h2>
+
+      <div class="flex">
+        <pre class="f3"><code class="language-diff">const Clock = ({ hour, minute, second }) =&gt; (
+  &lt;svg className=&quot;dib w-50&quot; viewBox=&quot;0 0 24 24&quot;&gt;
+
+    &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;#343530&quot; fill=&quot;#f8faf9&quot; /&gt;
+
++     &lt;path ref={el => rotateToTime(el, second, 0, 60)}
+        d=&quot;M12,12 v-5&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+
++     &lt;path ref={el => rotateToTime(el, minute, 0, 60)}
+        d=&quot;M12,12 v-7&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+
++     &lt;path ref={el => rotateToTime(el, hour, 0, 12)}
+        d=&quot;M12,12 v-6&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#f24949&quot; strokeWidth=&quot;0.5&quot; /&gt;
+      &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.25&quot; fill=&quot;#f24949&quot; /&gt;
+
+  &lt;/svg&gt;
+
++ function rotateToTime(node, value, start, stop) {
++   TweenMax.to(node, 1, {
++     rotation: `${mapValue(value, start, stop, 0, 360)}_cw`,
++     transformOrigin: "50% 100%"
++   });
++ }
++
++ function mapValue(v, start1, stop1, start2, stop2) {
++   return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
++ };
+);</code></pre>
+        <svg class="db w4 h4 center mt4" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+          <path style="transform-origin: 50% 100%; transform: rotate(0.333turn);"
+            d="M12,12 v-5" stroke-linecap="round" stroke="#2f7fe6" />
+          <path style="transform-origin: 50% 100%; transform: rotate(0.617turn);"
+            d="M12,12 v-7" stroke-linecap="round" stroke="#2f7fe6" />
+          <path style="transform-origin: 50% 100%; transform: rotate(0.2turn);"
+            d="M12,12 v-6" stroke-linecap="round" stroke="#f24949" stroke-width="0.5" />
+          <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+        </svg>
+      </div>
+
+      <h2 class="f2 mt6">Lifecycle Phases</h2>
+      <figure class="mb5 mh0">
+        <img src="lifecycle.png" />
+        <figcaption class="pl2 mt3">
+          from <a class="link blue dim"
+            href="https://www.codevoila.com/post/57/reactjs-tutorial-react-component-lifecycle">
+            React.js Tutorial: React Component Lifecycle
+          </a>
+        </figcaption>
+      </figure>
+
+      <pre class="f3"><code class="language-js">
+const Clock = (props) => &lt;div&gt;{ props.hour }:{ props.minute }:{ props.second }&lt;/div&gt;;
+      </code></pre>
+
+      <h2 class="f2 mt6">Lifecycle methods</h2>
+      <table class="w-100 code" cellspacing="0">
+        <thead>
+          <tr class="bg-near-white f4">
+            <th class="fw6 pv3 pr3">name</th>
+            <th class="fw6 pv3 pr3">called for</th>
+            <th class="fw6 pv3 pr3">receives context</th>
+            <th class="fw6 pv3 pr3">setState() triggers an update</th>
+          </tr>
+        </thead>
+        <tbody class="lh-copy">
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentWillMount</td>
+            <td class="pv3 pr3 bb b--black-20 tc">initial render()</td>
+            <td class="pv3 pr3 bb b--black-20 tc">🚫</td>
+            <td class="pv3 pr3 bb b--black-20 tc">🚫</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentDidMount</td>
+            <td class="pv3 pr3 bb b--black-20 tc">initial render()</td>
+            <td class="pv3 pr3 bb b--black-20 tc">🚫</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentWillReceiveProps</td>
+            <td class="pv3 pr3 bb b--black-20 tc">new props</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">shouldComponentUpdate</td>
+            <td class="pv3 pr3 bb b--black-20 tc">new props/state</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentWillUpdate</td>
+            <td class="pv3 pr3 bb b--black-20 tc">new props/state</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+            <td class="pv3 pr3 bb b--black-20 tc">N/A</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentDidUpdate</td>
+            <td class="pv3 pr3 bb b--black-20 tc">new props/state</td>
+            <td class="pv3 pr3 bb b--black-20 tc">🚫</td>
+            <td class="pv3 pr3 bb b--black-20 tc">✅</td>
+          </tr>
+          <tr>
+            <td class="pv3 pr3 bb b--black-20 tc">componentWillUnmount</td>
+            <td class="pv3 pr3 bb b--black-20 tc">unmounting</td>
+            <td class="pv3 pr3 bb b--black-20 tc">🚫</td>
+            <td class="pv3 pr3 bb b--black-20 tc">N/A</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <script src="prism.js"></script>
+    <script>
+      const data = {
+        title: 'React Clock #2',
+        html: '<div id="root"></div>',
+        js: `
+const Clock = ({ hour, minute, second }) => (
+  <svg className="dib w-50" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+    <path
+      ref={el => rotateToTime(el, second, 0, 60)}
+      d="M12,12 v-5"
+      strokeLinecap="round"
+      stroke="#2f7fe6"
+    />
+    <path
+      ref={el => rotateToTime(el, minute, 0, 60)}
+      d="M12,12 v-7"
+      strokeLinecap="round"
+      stroke="#2f7fe6"
+    />
+    <path
+      ref={el => rotateToTime(el, hour, 0, 12)}
+      d="M12,12 v-6"
+      strokeLinecap="round"
+      stroke="#f24949"
+      strokeWidth="0.5"
+    />
+    <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+  </svg>
+);
+
+function rotateToTime(node, value, start, stop) {
+  TweenMax.to(node, 1, {
+    rotation: \`\${mapValue(value, start, stop, 0, 360)}_cw\`,
+    transformOrigin: "50% 100%"
+  });
+}
+
+function mapValue(v, start1, stop1, start2, stop2) {
+  return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+};
+
+const App = () => (
+  <div className="flex items-center justify-center vh-100">
+    <Clock hour={4} minute={37} second={12} />
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));`,
+        editors: "001",
+        js_pre_processor: 'babel',
+        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js'
+      };
+
+      const stringifiedData = JSON.stringify(data)
+        .replace(/"/g, '&​quot;')
+        .replace(/'/g, '&apos;');
+      document.getElementById('js-clock-2').value = stringifiedData;
+    </script>
+  </body>
+</html>

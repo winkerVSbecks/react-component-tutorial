@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+    <link href="prism.css" rel="stylesheet" />
+  </head>
+  <body class="dark-gray sans-serif">
+    <article class="pa3 pa4-ns mb6">
+      <h1 class="f3 f1-m f-subheadline-l">Props 🍱</h1>
+
+      <ul class="list pl0 f3 lh-copy mb5">
+        <li class="mb2">Props (properties) are data passed into a component from a parent component</li>
+        <li>Used to dynamically change what a component renders or how it behaves</li>
+      </ul>
+
+      <pre class="f3 mb3"><code class="language-js">
+const Clock = (props) => &lt;div&gt;{ props.hour }:{ props.minute }:{ props.second }&lt;/div&gt;;
+      </code></pre>
+
+      <pre class="f3"><code class="language-js">
+&#x3C;Clock hour={4} minute={37} second={12} /&#x3E;
+      </code></pre>
+
+      <form action="https://codepen.io/pen/define" method="POST" target="_blank">
+        <input id="js-clock-1" type="hidden" name="data" \>
+        <button class="bn pointer grow b br1 dark-blue bg-light-green inline-flex items-center tc pa3 mb6">
+          <img class="dib h1 w1" src="https://icon.now.sh/codepen/00449e" />
+          <span class="f6 ml2">Launch CodePen</span>
+        </button>
+      </form>
+
+      <h2 class="f1">Destructuring</h2>
+      <p class="f3 lh-copy">Destructuring is a way to quickly extract data out of an <code>{}</code> or <code>[]</code> without having to write much code.</p>
+      <pre class="f3"><code class="language-js">// Destructure object
+let rectangle = {
+  width: 12,
+  height: 20,
+  getAread: function drawText() { return width * height },
+};
+
+let { width, height } = rectangle;
+
+
+// Destructure function arguments
+let john = { firstName: 'John', lastName: 'Doe', middleName: 'Smith' };
+
+function sayName({firstName, lastName, middleName = 'N/A'}) {
+  console.log(`Hello ${ firstName } ${ middleName } ${ lastName }`);
+}</code></pre>
+
+
+      <h2 class="f1 mt6">Props, Destructuring and JSX</h2>
+      <ul class="list pl0 f3 lh-copy mb5">
+        <li class="mb2">We can use destructuring assignment with <code>{}</code> to extract specific fields from props of a component.</li>
+        <li class="mb2">⚠️ Not the same as the use of <code>{}</code> for interpolation.</li>
+        <li>This also allows us to specify default values for the props.</li>
+      </ul>
+
+      <pre class="f3 mb3"><code class="language-js">
+const Clock = ({ hour = 0, minute = 0, second = 0 }) => (
+  &lt;div&gt;{ hour }:{ minute }:{ second }&lt;/div&gt;
+);
+      </code></pre>
+    </article>
+
+    <script src="prism.js"></script>
+    <script>
+      const data = {
+        title: 'React Clock',
+        html: '<div id="root"></div>',
+        js: `
+const Clock = (props) => <div className="f3">{ props.hour }:{ props.minute }:{ props.second }</div>;
+
+const App = () => (
+  <div className="flex items-center justify-center vh-100">
+    <Clock hour={4} minute={37} second={12} />
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));`,
+        editors: "001",
+        js_pre_processor: 'babel',
+        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js'
+      };
+
+      const stringifiedData = JSON.stringify(data)
+        .replace(/"/g, '&​quot;')
+        .replace(/'/g, '&apos;');
+      document.getElementById('js-clock-1').value = stringifiedData;
+    </script>
+  </body>
+</html>
