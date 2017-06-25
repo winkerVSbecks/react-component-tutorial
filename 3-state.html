@@ -5,19 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <link href="prism.css" rel="stylesheet" />
   </head>
   <body class="dark-gray sans-serif">
-    <article class="pa3 pa4-ns">
-      <h1 class="f3 f1-m f-headline-l">State 🔋</h1>
+    <article class="pa3 pa4-ns mb6">
+      <h1 class="f3 f1-m f-subheadline-l">State 🔋</h1>
+      <ol class="f3 lh-copy mb6">
+        <li class="mb2">Data is information we need to render our app.</li>
+        <li class="mb2">Props allow us to pass data from a parent to its child component.</li>
+        <li class="mb2">State is a snapshot of data at one point in time.</li>
+        <li>A Component manages its own state internally.</li>
+      </ol>
 
-      <ul class="list pl0 f3 lh-copy mb5">
-        <li class="mb2">Props (properties) are data passed into a component from a parent component</li>
-        <li>Used to dynamically change what a component renders or how it behaves</li>
-      </ul>
+      <h2 class="f2 mt6">⏲️ Start the Clock</h2>
+      <ol class="f3 lh-copy mb6">
+        <li class="mb2">We want to set up a timer whenever the Clock is rendered to the DOM for the first time.</li>
+        <li>We clear that timer whenever the Clock is removed from the DOM.</li>
+      </ol>
 
-      <table class="f6 w-100 mw7 mv5 code" cellspacing="0">
+      <table class="f6 w-100 mw7 mb6 code" cellspacing="0">
         <thead>
           <tr class="bg-near-white ttu tracked">
             <th class="b f4 pv3">State</th>
@@ -52,4 +58,192 @@
           </tr>
         </tbody>
       </table>
+
+      <pre class="f3"><code class="language-diff">class Clock extends React.Component {
+
++ constructor(props) {
++   super(props);
++   this.state = { date: new Date() };
++ }
+
+  componentDidMount() {
++   this.timerID = setInterval(() => this.tick(), 1000);
+
+    TweenMax.fromTo(this.clockEl, 1, { scale: 0 }, {
+      scale: 1,
+      ease: Elastic.easeOut.config(1, 0.3),
+    });
+  }
+
++ componentWillUpdate(nextProps, nextState) {
++   const { date } = nextState;
++   const second = date.getSeconds();
++   const minute = date.getMinutes();
++   const hour = date.getHours() &gt; 12 ? date.getHours() - 12 : date.getHours();
++
++   rotateToTime(this.secondsEl, second, 0, 60);
++   rotateToTime(this.minsEl, minute, 0, 60);
++   rotateToTime(this.hoursEl, hour, 0, 12);
++ }
++
++ componentWillUnmount() {
++   clearInterval(this.timerID);
++ }
+
++ tick() {
++   this.setState({
++     date: new Date(),
++   });
++ }
+
+  render() {
+    return (
+      &lt;svg ref={el => {this.clockEl = el;}}
+        className=&quot;dib w-50&quot; viewBox=&quot;0 0 24 24&quot;&gt;
+        &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;#343530&quot; fill=&quot;#f8faf9&quot; /&gt;
+        &lt;path
++         ref={el =&gt; { this.hourEl = el; }}
+          d=&quot;M12,12 v-5&quot;
+          strokeLinecap=&quot;round&quot;
+          stroke=&quot;#2f7fe6&quot;
+        /&gt;
+        &lt;path
++         ref={el =&gt; { this.minsEl = el; }}
+          d=&quot;M12,12 v-7&quot;
+          strokeLinecap=&quot;round&quot;
+          stroke=&quot;#2f7fe6&quot;
+        /&gt;
+        &lt;path
++         ref={el =&gt; { this.secondsEl = el; }}
+          d=&quot;M12,12 v-6&quot;
+          strokeLinecap=&quot;round&quot;
+          stroke=&quot;#f24949&quot;
+          strokeWidth=&quot;0.5&quot;
+        /&gt;
+        &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.25&quot; fill=&quot;#f24949&quot; /&gt;
+      &lt;/svg&gt;
+    );
+  }
+}</code></pre>
+    </article>
+
+    <script src="prism.js"></script>
+    <script>
+      const data1 = {
+        title: 'React Clock #2',
+        editors: "001",
+        js_pre_processor: 'babel',
+        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
+        html: '<div id="root"></div>',
+        js: `
+const Clock = ({ hour, minute, second }) => (
+  <svg className="dib w-50" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+    <path
+      ref={el => rotateToTime(el, second, 0, 60)}
+      d="M12,12 v-5"
+      strokeLinecap="round"
+      stroke="#2f7fe6"
+    />
+    <path
+      ref={el => rotateToTime(el, minute, 0, 60)}
+      d="M12,12 v-7"
+      strokeLinecap="round"
+      stroke="#2f7fe6"
+    />
+    <path
+      ref={el => rotateToTime(el, hour, 0, 12)}
+      d="M12,12 v-6"
+      strokeLinecap="round"
+      stroke="#f24949"
+      strokeWidth="0.5"
+    />
+    <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+  </svg>
+);
+
+function rotateToTime(node, value, start, stop) {
+  TweenMax.to(node, 1, {
+    rotation: \`\${mapValue(value, start, stop, 0, 360)}_cw\`,
+    transformOrigin: "50% 100%"
+  });
+}
+
+function mapValue(v, start1, stop1, start2, stop2) {
+  return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+};
+
+const App = () => (
+  <div className="flex items-center justify-center vh-100">
+    <Clock hour={4} minute={37} second={12} />
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));`,
+      };
+
+      const data2 = {
+        title: 'React Clock #3',
+        editors: "001",
+        js_pre_processor: 'babel',
+        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
+        html: '<div id="root"></div>',
+        js: `
+class Clock extends React.Component {
+
+  componentDidMount() {
+    TweenMax.fromTo(this.clockEl, 1.2, { scale: 0 }, {
+      scale: 1,
+      ease: Elastic.easeOut.config(1, 0.3),
+    });
+  }
+
+  render() {
+    const { hour, minute, second } = this.props;
+
+    return (
+      <svg ref={el => {this.clockEl = el;}}
+        className="dib w-50" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+        <path ref={el => rotateToTime(el, second, 0, 60)}
+          d="M12,12 v-5" strokeLinecap="round" stroke="#2f7fe6" />
+        <path ref={el => rotateToTime(el, minute, 0, 60)}
+          d="M12,12 v-7" strokeLinecap="round" stroke="#2f7fe6" />
+        <path ref={el => rotateToTime(el, hour, 0, 12)}
+          d="M12,12 v-6" strokeLinecap="round" stroke="#f24949" strokeWidth="0.5" />
+        <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+      </svg>
+    );
+  }
+}
+
+function rotateToTime(node, value, start, stop) {
+  TweenMax.to(node, 1, {
+    rotation: \`\${mapValue(value, start, stop, 0, 360)}_cw\`,
+    transformOrigin: "50% 100%",
+  });
+}
+
+function mapValue(v, start1, stop1, start2, stop2) {
+  return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+};
+
+const App = () => (
+  <div className="flex items-center justify-center vh-100">
+    <Clock hour={4} minute={37} second={12} />
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));`,
+      };
+
+      const stringifyData = data =>  JSON.stringify(data)
+        .replace(/"/g, '&​quot;')
+        .replace(/'/g, '&apos;');
+      document.getElementById('js-clock-2').value = stringifyData(data1);
+      document.getElementById('js-clock-3').value = stringifyData(data2);
+    </script>
+  </body>
 </html>

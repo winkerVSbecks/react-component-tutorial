@@ -11,9 +11,10 @@
     <article class="pa3 pa4-ns mb6">
       <h1 class="f3 f1-m f-subheadline-l">Props 🍱</h1>
 
-      <ul class="list pl0 f3 lh-copy mb5">
-        <li class="mb2">Props (properties) are data passed into a component from a parent component</li>
-        <li>Used to dynamically change what a component renders or how it behaves</li>
+      <ul class="f3 lh-copy mb5 measure">
+        <li class="mb2">Props (properties) are data passed into a component from a parent component.</li>
+        <li class="mb2">Used to dynamically change what a component renders or how it behaves.</li>
+        <li>A Component cannot change its props.</li>
       </ul>
 
       <pre class="f3 mb3"><code class="language-js">
@@ -33,7 +34,7 @@ const Clock = (props) => &lt;div&gt;{ props.hour }:{ props.minute }:{ props.seco
       </form>
 
       <h2 class="f1">Destructuring</h2>
-      <p class="f3 lh-copy">Destructuring is a way to quickly extract data out of an <code>{}</code> or <code>[]</code> without having to write much code.</p>
+      <p class="f3 lh-copy measure">Destructuring is a way to quickly extract data out of an <code>{}</code> or <code>[]</code> without having to write much code.</p>
       <pre class="f3"><code class="language-js">// Destructure object
 let rectangle = {
   width: 12,
@@ -53,7 +54,7 @@ function sayName({firstName, lastName, middleName = 'N/A'}) {
 
 
       <h2 class="f1 mt6">Props, Destructuring and JSX</h2>
-      <ul class="list pl0 f3 lh-copy mb5">
+      <ul class="f3 lh-copy mb5 measure">
         <li class="mb2">We can use destructuring assignment with <code>{}</code> to extract specific fields from props of a component.</li>
         <li class="mb2">⚠️ Not the same as the use of <code>{}</code> for interpolation.</li>
         <li>This also allows us to specify default values for the props.</li>

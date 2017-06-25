@@ -12,7 +12,7 @@
       <h1 class="f3 f1-m f-subheadline-l">Component Lifecycle 🔁</h1>
 
       <p class="f3 lh-copy mb5 measure">
-        When a React component is rendered in the browser it goes through three lifecycle phases: mounted, update and unmounted.
+        When a React component is rendered in the browser it goes through three lifecycle phases: mounting, update and unmounting.
       </p>
 
       <h2 class="f2 mt6">⏰ SVG O'clock</h2>
@@ -94,6 +94,11 @@
         </svg>
       </div>
 
+      <h2 class="f2 mt6">💥 Animate the Clock</h2>
+      <p class="f3 lh-copy mb6 measure">
+        We want to animate the clock in when it is rendered to the DOM for the first time.
+      </p>
+
       <h2 class="f2 mt6">Lifecycle Phases</h2>
       <figure class="mb5 mh0">
         <img src="lifecycle.png" />
@@ -104,10 +109,6 @@
           </a>
         </figcaption>
       </figure>
-
-      <pre class="f3"><code class="language-js">
-const Clock = (props) => &lt;div&gt;{ props.hour }:{ props.minute }:{ props.second }&lt;/div&gt;;
-      </code></pre>
 
       <h2 class="f2 mt6">Lifecycle methods</h2>
       <table class="w-100 code" cellspacing="0">
@@ -164,12 +165,52 @@ const Clock = (props) => &lt;div&gt;{ props.hour }:{ props.minute }:{ props.seco
           </tr>
         </tbody>
       </table>
+
+      <h2 class="f2 mt6">Class Component</h2>
+      <pre class="f3"><code class="language-js">class Clock extends React.Component {
+
+  componentDidMount() {
+    TweenMax.fromTo(this.clockEl, 1, { scale: 0 }, {
+      scale: 1,
+      ease: Elastic.easeOut.config(1, 0.3),
+    });
+  }
+
+  render() {
+    const { hour, minute, second } = this.props;
+
+    return (
+      &lt;svg ref={el => {this.clockEl = el;}}
+        className=&quot;dib w-50&quot; viewBox=&quot;0 0 24 24&quot;&gt;
+        &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; stroke=&quot;#343530&quot; fill=&quot;#f8faf9&quot; /&gt;
+        &lt;path ref={el => rotateToTime(el, second, 0, 60)}
+          d=&quot;M12,12 v-5&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+        &lt;path ref={el => rotateToTime(el, minute, 0, 60)}
+          d=&quot;M12,12 v-7&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#2f7fe6&quot; /&gt;
+        &lt;path ref={el => rotateToTime(el, hour, 0, 12)}
+          d=&quot;M12,12 v-6&quot; strokeLinecap=&quot;round&quot; stroke=&quot;#f24949&quot; strokeWidth=&quot;0.5&quot; /&gt;
+        &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.25&quot; fill=&quot;#f24949&quot; /&gt;
+      &lt;/svg&gt;
+    );
+  }
+}</code></pre>
+      <form class="dib" action="https://codepen.io/pen/define" method="POST" target="_blank">
+        <input id="js-clock-3" type="hidden" name="data" \>
+        <button class="bn pointer grow b br1 dark-blue bg-light-green inline-flex items-center tc pa3">
+          <img class="dib h1 w1" src="https://icon.now.sh/codepen/00449e" />
+          <span class="f6 ml2">Launch CodePen</span>
+        </button>
+      </form>
     </article>
 
     <script src="prism.js"></script>
     <script>
-      const data = {
+      const data1 = {
         title: 'React Clock #2',
+        editors: "001",
+        js_pre_processor: 'babel',
+        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
         html: '<div id="root"></div>',
         js: `
 const Clock = ({ hour, minute, second }) => (
@@ -216,16 +257,69 @@ const App = () => (
 );
 
 ReactDOM.render(<App />, document.getElementById("root"));`,
+      };
+
+      const data2 = {
+        title: 'React Clock #3',
         editors: "001",
         js_pre_processor: 'babel',
         css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
-        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js'
+        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
+        html: '<div id="root"></div>',
+        js: `
+class Clock extends React.Component {
+
+  componentDidMount() {
+    TweenMax.fromTo(this.clockEl, 1.2, { scale: 0 }, {
+      scale: 1,
+      ease: Elastic.easeOut.config(1, 0.3),
+    });
+  }
+
+  render() {
+    const { hour, minute, second } = this.props;
+
+    return (
+      <svg ref={el => {this.clockEl = el;}}
+        className="dib w-50" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+        <path ref={el => rotateToTime(el, second, 0, 60)}
+          d="M12,12 v-5" strokeLinecap="round" stroke="#2f7fe6" />
+        <path ref={el => rotateToTime(el, minute, 0, 60)}
+          d="M12,12 v-7" strokeLinecap="round" stroke="#2f7fe6" />
+        <path ref={el => rotateToTime(el, hour, 0, 12)}
+          d="M12,12 v-6" strokeLinecap="round" stroke="#f24949" strokeWidth="0.5" />
+        <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+      </svg>
+    );
+  }
+}
+
+function rotateToTime(node, value, start, stop) {
+  TweenMax.to(node, 1, {
+    rotation: \`\${mapValue(value, start, stop, 0, 360)}_cw\`,
+    transformOrigin: "50% 100%",
+  });
+}
+
+function mapValue(v, start1, stop1, start2, stop2) {
+  return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+};
+
+const App = () => (
+  <div className="flex items-center justify-center vh-100">
+    <Clock hour={4} minute={37} second={12} />
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));`,
       };
 
-      const stringifiedData = JSON.stringify(data)
+      const stringifyData = data =>  JSON.stringify(data)
         .replace(/"/g, '&​quot;')
         .replace(/'/g, '&apos;');
-      document.getElementById('js-clock-2').value = stringifiedData;
+      document.getElementById('js-clock-2').value = stringifyData(data1);
+      document.getElementById('js-clock-3').value = stringifyData(data2);
     </script>
   </body>
 </html>
