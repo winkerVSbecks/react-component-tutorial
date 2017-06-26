@@ -125,43 +125,91 @@
     );
   }
 }</code></pre>
+      <form class="dib" action="https://codepen.io/pen/define" method="POST" target="_blank">
+        <input id="js-clock-3" type="hidden" name="data" \>
+        <button class="bn pointer grow b br1 dark-blue bg-light-green inline-flex items-center tc pa3">
+          <img class="dib h1 w1" src="https://icon.now.sh/codepen/00449e" />
+          <span class="f6 ml2">Launch CodePen</span>
+        </button>
+      </form>
     </article>
 
     <script src="prism.js"></script>
     <script>
-      const data1 = {
-        title: 'React Clock #2',
+      const data = {
+        title: 'React Clock #4',
         editors: "001",
         js_pre_processor: 'babel',
         css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
         js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
         html: '<div id="root"></div>',
         js: `
-const Clock = ({ hour, minute, second }) => (
-  <svg className="dib w-50" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
-    <path
-      ref={el => rotateToTime(el, second, 0, 60)}
-      d="M12,12 v-5"
-      strokeLinecap="round"
-      stroke="#2f7fe6"
-    />
-    <path
-      ref={el => rotateToTime(el, minute, 0, 60)}
-      d="M12,12 v-7"
-      strokeLinecap="round"
-      stroke="#2f7fe6"
-    />
-    <path
-      ref={el => rotateToTime(el, hour, 0, 12)}
-      d="M12,12 v-6"
-      strokeLinecap="round"
-      stroke="#f24949"
-      strokeWidth="0.5"
-    />
-    <circle cx="12" cy="12" r="1.25" fill="#f24949" />
-  </svg>
-);
+class Clock extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+
+    TweenMax.fromTo(this.clockEl, 1, { scale: 0 }, {
+      scale: 1,
+      ease: Elastic.easeOut.config(1, 0.3),
+    });
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const { date } = nextState;
+    const second = date.getSeconds();
+    const minute = date.getMinutes();
+    const hour = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+
+    rotateToTime(this.secondsEl, second, 0, 60);
+    rotateToTime(this.minsEl, minute, 0, 60);
+    rotateToTime(this.hoursEl, hour, 0, 12);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date(),
+    });
+  }
+
+  render() {
+    return (
+      <svg ref={el => {this.clockEl = el;}}
+        className="dib w-50" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
+        <path
+          ref={el => { this.hourEl = el; }}
+          d="M12,12 v-5"
+          strokeLinecap="round"
+          stroke="#2f7fe6"
+        />
+        <path
+          ref={el => { this.minsEl = el; }}
+          d="M12,12 v-7"
+          strokeLinecap="round"
+          stroke="#2f7fe6"
+        />
+        <path
+          ref={el => { this.secondsEl = el; }}
+          d="M12,12 v-6"
+          strokeLinecap="round"
+          stroke="#f24949"
+          strokeWidth="0.5"
+        />
+        <circle cx="12" cy="12" r="1.25" fill="#f24949" />
+      </svg>
+    );
+  }
+}
 
 function rotateToTime(node, value, start, stop) {
   TweenMax.to(node, 1, {
@@ -183,67 +231,10 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById("root"));`,
       };
 
-      const data2 = {
-        title: 'React Clock #3',
-        editors: "001",
-        js_pre_processor: 'babel',
-        css_external: 'https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.6.2/tachyons.min.css',
-        js_external: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js;https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js;https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js',
-        html: '<div id="root"></div>',
-        js: `
-class Clock extends React.Component {
-
-  componentDidMount() {
-    TweenMax.fromTo(this.clockEl, 1.2, { scale: 0 }, {
-      scale: 1,
-      ease: Elastic.easeOut.config(1, 0.3),
-    });
-  }
-
-  render() {
-    const { hour, minute, second } = this.props;
-
-    return (
-      <svg ref={el => {this.clockEl = el;}}
-        className="dib w-50" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" stroke="#343530" fill="#f8faf9" />
-        <path ref={el => rotateToTime(el, second, 0, 60)}
-          d="M12,12 v-5" strokeLinecap="round" stroke="#2f7fe6" />
-        <path ref={el => rotateToTime(el, minute, 0, 60)}
-          d="M12,12 v-7" strokeLinecap="round" stroke="#2f7fe6" />
-        <path ref={el => rotateToTime(el, hour, 0, 12)}
-          d="M12,12 v-6" strokeLinecap="round" stroke="#f24949" strokeWidth="0.5" />
-        <circle cx="12" cy="12" r="1.25" fill="#f24949" />
-      </svg>
-    );
-  }
-}
-
-function rotateToTime(node, value, start, stop) {
-  TweenMax.to(node, 1, {
-    rotation: \`\${mapValue(value, start, stop, 0, 360)}_cw\`,
-    transformOrigin: "50% 100%",
-  });
-}
-
-function mapValue(v, start1, stop1, start2, stop2) {
-  return ((v - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-};
-
-const App = () => (
-  <div className="flex items-center justify-center vh-100">
-    <Clock hour={4} minute={37} second={12} />
-  </div>
-);
-
-ReactDOM.render(<App />, document.getElementById("root"));`,
-      };
-
       const stringifyData = data =>  JSON.stringify(data)
         .replace(/"/g, '&​quot;')
         .replace(/'/g, '&apos;');
-      document.getElementById('js-clock-2').value = stringifyData(data1);
-      document.getElementById('js-clock-3').value = stringifyData(data2);
+      document.getElementById('js-clock-3').value = stringifyData(data);
     </script>
   </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+    <link href="prism.css" rel="stylesheet" />
+  </head>
+  <body class="dark-gray sans-serif">
+    <article class="pa3 pa4-ns mb7">
+      <h1 class="f3 f1-m f-subheadline-l">Exercise 💪🏽</h1>
+
+      <p class="lh-copy f3 measure mb4">
+        Edit the <code>exercise-app.js</code> file to build a stateful weather card that fetches the weather for Toronto every 15 seconds. Use the OpenWeatherMap API to fetch the weather data.
+      </p>
+      <pre><code class="language-html f4">http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=5cc1f25759881907aed6171543839b19&units=metric</code></pre>
+
+      <p class="lh-copy f3 measure mv4">
+        Reshape the data received from the OpenWeatherMap API to the following:
+      </p>
+
+      <pre><code class="language-js f4">{
+  temp: data.main.temp,
+  description: data.weather[0].description,
+  icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+}</code></pre>
+
+      <h1 class="mt6 mb3 f6 ttu tracked">Exercise Result</h1>
+      <div id="exercise"></div>
+
+      <script src="prism.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+      <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+      <script type="text/babel" src="exercise-app.js"></script>
+    </article>
+  </body>
+</html>
