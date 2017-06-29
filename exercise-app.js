@@ -1,14 +1,5 @@
-const API_KEY = '5cc1f25759881907aed6171543839b19';
+const API_KEY = '581522ec0b69c0bcc097344d84601245';
 
-function getWeather() {
-  return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
-    .then(res => res.json())
-    .then(reshapeData);
-}
-
-function reshapeData() {
-
-}
 
 
 const Weather = ({ temp, description, icon }) => (
@@ -28,13 +19,66 @@ const Weather = ({ temp, description, icon }) => (
 );
 
 
-const App = () => (
+class App extends React.Component {
+
+  constructor(props) {                  // where do we hook up props to ? where does this prop data come from?
+  super(props);                       // what is the purpose of this? why do we need to call super?
+  this.state = {
+  temp: 0,
+  description: 'not loaded yet',
+  icon: `http://openweathermap.org/img/w/10d.png`};  // always intialize a state? is the state to be updated by passing in props?
+  this.reshapeData = this.reshapeData.bind(this)
+}
+
+ getWeather() {
+    return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=581522ec0b69c0bcc097344d84601245&units=metric`)
+      .then(res => {
+        // cosole.log(res.json())
+        res.json()})
+      .then(this.reshapeData);
+  }
+
+   reshapeData(dt) {
+    console.log(dt)
+    this.setState(
+      this.state = {
+      temp: + new Date(),
+      description: 'not loaded yet1',
+      icon: `http://openweathermap.org/img/w/10d.png` //`http://openweathermap.org/img/w/${data.weather[0].icon}.png`};
+    }
+    )
+  }
+
+componentDidMount() {
+    this.timerID = setInterval(() => this.getWeather(), 15000); // is this.timerID a prop or a state? It calls a function that upstates the date variable
+
+    // TweenMax.fromTo(
+    //   this.clockEl,
+    //   1,
+    //   { scale: 0 },
+    //   {
+    //     scale: 1,
+    //     ease: Elastic.easeOut.config(1, 0.3)
+    //   }
+    // );
+  }
+
+  componentWillUnmount() {
+  clearInterval(this.timerID);                 // how does it know when to unmount? what is I didn't clear the interval?                                   // typically do I need to try and clean up in componentWillUnmount
+}
+render() {
+   return (
+
   <Weather
-    temp={14.85}
+    temp={this.state.temp}
     description="proximity shower rain"
-    icon="http://openweathermap.org/img/w/10d.png"
+    icon={this.state.temp} //"http://openweathermap.org/img/w/10d.png"
   />
-);
+)
+}
+
+}
+
 
 
 
