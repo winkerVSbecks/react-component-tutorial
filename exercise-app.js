@@ -28,23 +28,27 @@ class App extends React.Component {
   description: 'not loaded yet',
   icon: `http://openweathermap.org/img/w/10d.png`};  // always intialize a state? is the state to be updated by passing in props?
   this.reshapeData = this.reshapeData.bind(this)
+  this.render()
 }
 
  getWeather() {
     return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=581522ec0b69c0bcc097344d84601245&units=metric`)
       .then(res => {
-        // cosole.log(res.json())
-        res.json()})
-      .then(this.reshapeData);
+        // console.log(37, res.json())
+        return res.json()})
+      .then((dt)=>{
+        // console.log(40, dt)
+        this.reshapeData(dt)
+      });
   }
 
-   reshapeData(dt) {
-    console.log(dt)
+   reshapeData(data) {
+    console.log(data)
     this.setState(
       this.state = {
-      temp: + new Date(),
-      description: 'not loaded yet1',
-      icon: `http://openweathermap.org/img/w/10d.png` //`http://openweathermap.org/img/w/${data.weather[0].icon}.png`};
+      temp: `${data.main.temp} timestamp: ${+ new Date()}`,
+      description: data.weather[0].description,
+      icon: `http://openweathermap.org/img/w/${"09d"}.png` //`http://openweathermap.org/img/w/${data.weather[0].icon}.png`};
     }
     )
   }
@@ -52,15 +56,6 @@ class App extends React.Component {
 componentDidMount() {
     this.timerID = setInterval(() => this.getWeather(), 15000); // is this.timerID a prop or a state? It calls a function that upstates the date variable
 
-    // TweenMax.fromTo(
-    //   this.clockEl,
-    //   1,
-    //   { scale: 0 },
-    //   {
-    //     scale: 1,
-    //     ease: Elastic.easeOut.config(1, 0.3)
-    //   }
-    // );
   }
 
   componentWillUnmount() {
@@ -71,8 +66,8 @@ render() {
 
   <Weather
     temp={this.state.temp}
-    description="proximity shower rain"
-    icon={this.state.temp} //"http://openweathermap.org/img/w/10d.png"
+    description={this.state.description}
+    icon={this.state.icon} //"http://openweathermap.org/img/w/10d.png"
   />
 )
 }
