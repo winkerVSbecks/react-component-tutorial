@@ -27,25 +27,24 @@ class App extends React.Component {
   temp: 0,
   description: 'not loaded yet',
   icon: `http://openweathermap.org/img/w/10d.png`};  // always intialize a state? is the state to be updated by passing in props?
-  this.reshapeData = this.reshapeData.bind(this)
-  this.render()
+  // this.reshapeData = this.reshapeData.bind(this)
+  this.render()                     // was i supposed call render here?
 }
 
  getWeather() {
     return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=581522ec0b69c0bcc097344d84601245&units=metric`)
       .then(res => {
-        // console.log(37, res.json())
+        // console.log(37,res && res.json())
         return res.json()})
       .then((dt)=>{
-        // console.log(40, dt)
+        console.log(40, dt)
         this.reshapeData(dt)
-      });
+      })
   }
 
    reshapeData(data) {
     console.log(data)
-    this.setState(
-      this.state = {
+    this.setState({
       temp: `${data.main.temp} timestamp: ${+ new Date()}`,
       description: data.weather[0].description,
       icon: `http://openweathermap.org/img/w/${"09d"}.png` //`http://openweathermap.org/img/w/${data.weather[0].icon}.png`};
@@ -63,7 +62,6 @@ componentDidMount() {
 }
 render() {
    return (
-
   <Weather
     temp={this.state.temp}
     description={this.state.description}
