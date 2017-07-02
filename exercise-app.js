@@ -21,20 +21,20 @@ const Weather = ({ temp, description, icon }) => (
 
 class App extends React.Component {
 
-  constructor(props) {                  // where do we hook up props to ? where does this prop data come from?
+  constructor(props) {                // where do we hook up these props to ? where does this prop data come from?
   super(props);                       // what is the purpose of this? why do we need to call super?
   this.state = {
   temp: 0,
   description: 'not loaded yet',
   icon: `http://openweathermap.org/img/w/10d.png`};  // always intialize a state? is the state to be updated by passing in props?
-  // this.reshapeData = this.reshapeData.bind(this)
-  this.render()                     // was i supposed call render here?
+  // this.reshapeData = this.reshapeData.bind(this)  // when do we need to bind and when not (I've seen both...)
+  this.render()                       // was i supposed call render here? (I didn't and the card didn't show for a bit upon load)
 }
 
  getWeather() {
     return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=581522ec0b69c0bcc097344d84601245&units=metric`)
       .then(res => {
-        // console.log(37,res && res.json())
+        // console.log(37,res && res.json())     // when I uncomment this... I get error "promise already used" why?
         return res.json()})
       .then((dt)=>{
         console.log(40, dt)
@@ -45,15 +45,15 @@ class App extends React.Component {
    reshapeData(data) {
     console.log(data)
     this.setState({
-      temp: `${data.main.temp} timestamp: ${+ new Date()}`,
+      temp: `${data.main.temp} timestamp: ${+ new Date()}`,       // I added random time stamp for easier debugging... plz ignore
       description: data.weather[0].description,
-      icon: `http://openweathermap.org/img/w/${"09d"}.png` //`http://openweathermap.org/img/w/${data.weather[0].icon}.png`};
+      icon: `http://openweathermap.org/img/w/${"09d"}.png` 
     }
     )
   }
 
 componentDidMount() {
-    this.timerID = setInterval(() => this.getWeather(), 15000); // is this.timerID a prop or a state? It calls a function that upstates the date variable
+    this.timerID = setInterval(() => this.getWeather(), 15000); // is this.timerID a prop or a state?
 
   }
 
