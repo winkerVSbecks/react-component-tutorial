@@ -6,10 +6,13 @@ function getWeather() {
     .then(reshapeData);
 }
 
-function reshapeData() {
-
+function reshapeData(data) {
+  return {
+    temp: data.main.temp,
+    description: data.weather[0].description,
+    icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+  };
 }
-
 
 const Weather = ({ temp, description, icon }) => (
   <div className="bw2 ba blue dib pa3 bg-washed-blue">
@@ -27,15 +30,41 @@ const Weather = ({ temp, description, icon }) => (
   </div>
 );
 
+class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-const App = () => (
-  <Weather
-    temp={14.85}
-    description="proximity shower rain"
-    icon="http://openweathermap.org/img/w/10d.png"
-  />
-);
+    this.state = {
+      data: null,
+    };
+  }
 
+  refreshWeatherState() {
+    console.log('refreshWeatherState was called');
 
+    getWeather()
+      .then(data => this.setState({ data }));
+  }
+
+  componentDidMount() {
+    this.refreshWeatherState();
+
+    setInterval(this.refreshWeatherState.bind(this), 15000);
+  }
+
+  render() {
+    if (this.state.data == null) {
+      return null;
+    }
+
+    return (
+      <Weather
+        temp={this.state.data.temp}
+        description={this.state.data.description}
+        icon={this.state.data.icon}
+      />
+    );
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById('exercise'));
