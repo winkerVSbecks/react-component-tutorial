@@ -1,7 +1,6 @@
 const API_KEY = '5cc1f25759881907aed6171543839b19';
 
 function getWeather() {
-  console.log('getWeather is being called');
   return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
     .then(res => res.json())
     .then(reshapeData);
@@ -14,8 +13,6 @@ function reshapeData(data) {
     icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
   };
 }
-
-//somewhere, setTimeout and then call getWeather
 
 const Weather = ({ temp, description, icon }) => (
   <div className="bw2 ba blue dib pa3 bg-washed-blue">
@@ -33,7 +30,6 @@ const Weather = ({ temp, description, icon }) => (
   </div>
 );
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -44,6 +40,8 @@ class App extends React.Component {
   }
 
   refreshWeatherState() {
+    console.log('refreshWeatherState was called');
+
     getWeather()
       .then(data => this.setState({ data }));
   }
@@ -66,7 +64,7 @@ class App extends React.Component {
         icon={this.state.data.icon}
       />
     );
-  };
-};
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById('exercise'));
