@@ -1,5 +1,3 @@
-const API_KEY = '5cc1f25759881907aed6171543839b19';
-
 function getWeather() {
   return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
     .then(res => res.json())
