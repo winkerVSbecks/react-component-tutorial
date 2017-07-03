@@ -28,13 +28,25 @@ const Weather = ({ temp, description, icon }) => (
 );
 
 
-const App = () => (
-  <Weather
-    temp={14.85}
-    description="proximity shower rain"
-    icon="http://openweathermap.org/img/w/10d.png"
-  />
-);
+class App extends React.component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      temp: null,
+      description,
+      icon: null,
+    }
+  }
+  render() {
+    return (
+      <Weather
+        temp={14.85}
+        description="proximity shower rain"
+        icon="http://openweathermap.org/img/w/10d.png"
+      />
+    )
+  }
+};
 
 
 
