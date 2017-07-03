@@ -10,44 +10,46 @@ function reshapeData() {
 
 }
 
+class Weather extends React.Component {
+  render() {
+    return (
+      <div className="bw2 ba blue dib pa3 bg-washed-blue">
 
-const Weather = ({ temp, description, icon }) => (
-  <div className="bw2 ba blue dib pa3 bg-washed-blue">
+      <div className="flex items-stretch mb2">
+        <img src={this.props.icon} />
 
-    <div className="flex items-stretch mb2">
-      <img src={icon} />
+        <header className="ml3">
+          <h1 className="f7 ttu tracked mt0 mb2 flex-auto dark-blue">Toronto</h1>
+          <p className="f3 mv0">{this.props.temp} ℃</p>
+        </header>
+      </div>
 
-      <header className="ml3">
-        <h1 className="f7 ttu tracked mt0 mb2 flex-auto dark-blue">Toronto</h1>
-        <p className="f3 mv0">{ temp } ℃</p>
-      </header>
-    </div>
-
-    <p className="mv0 f5 ttc">{ description }</p>
-  </div>
-);
+      <p className="mv0 f5 ttc">{this.props.description}</p>
+      </div>
+    )
+  }
+}
 
 
-class App extends React.component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      temp: null,
-      description,
-      icon: null,
+      temp: 14.85,
+      description: "proximity shower rain",
+      icon: "http://openweathermap.org/img/w/10d.png",
     }
   }
   render() {
     return (
       <Weather
-        temp={14.85}
-        description="proximity shower rain"
-        icon="http://openweathermap.org/img/w/10d.png"
+        temp={this.state.temp}
+        description={this.state.description}
+        icon={this.state.icon}
       />
     )
   }
 };
-
 
 
 ReactDOM.render(<App />, document.getElementById('exercise'));
