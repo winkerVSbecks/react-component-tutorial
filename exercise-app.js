@@ -1,19 +1,5 @@
 const API_KEY = '84ad1fab102a4f3d506e9777a1e6d51d';
 
-function getWeather() {
-    return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
-        .then(res => res.json())
-        .then(reshapeData)
-}
-
-function reshapeData(data) {
-    return {
-        temp: data.main.temp,
-        description: data.weather[0].description,
-        icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-    };
-}
-
 const Weather = ({temp, description, icon}) => (
     <div className="bw2 ba blue dib pa3 bg-washed-blue">
         <div className="flex items-stretch mb2">
@@ -28,22 +14,45 @@ const Weather = ({temp, description, icon}) => (
     </div>
 );
 
-class App extends React.Component {
+class WeatherCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            icon: '',
             temp: '',
             description: '',
-        }
+            icon: '',
+        };
     }
 
     componentDidMount() {
-       getWeather().then(response => this.setState(response));
+        this.getWeather();
+        this.weatherCardID = setInterval(() => this.getWeather(), 15000);
+    }
+
+    componentWillUnmount() {
+       clearInterval(this.weatherCardID);
+    }
+
+    getWeather() {
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
+            .then(res => res.json())
+            .then(WeatherCard.reshapeData)
+            .then(res => {
+                this.setState(res);
+                console.log("updated weather"); // for testing
+            })
+    }
+
+    static reshapeData(data) {
+        return {
+            temp: data.main.temp,
+            description: data.weather[0].description,
+            icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+        };
     }
 
     render() {
-        const { icon, temp, description} = this.state;
+        const {icon, temp, description} = this.state;
         return (
             <Weather
                 temp={temp}
@@ -54,4 +63,4 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('exercise'));
+ReactDOM.render(<WeatherCard />, document.getElementById('exercise'));
