@@ -1,15 +1,46 @@
-const API_KEY = '5cc1f25759881907aed6171543839b19';
+const API_KEY = 'c670b18d8b550029efd22107efe00b2b';
 
-function getWeather() {
+class WeatherContainer extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      temp : null,
+      description: null,
+      icon: null
+    }
+  }
+
+  componentDidMount() {
+    this.getWeather()
+    this.startTimer()
+  }
+
+startTimer() {
+  setInterval(() => this.getWeather(), 15000)
+}
+
+getWeather() {
   return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
     .then(res => res.json())
-    .then(reshapeData);
+    .then(weatherData => this.reshapeData(weatherData));
 }
 
-function reshapeData() {
-
+reshapeData(weatherData) {
+  this.setState({temp: weatherData.main.temp, description: weatherData.weather[0].description, icon: icon(weatherData.weather[0].icon)})
 }
 
+render() {
+    return (
+        <Weather temp={this.state.temp} 
+        description={this.state.description} 
+        icon={this.state.icon}/>
+      )
+  }
+}
+
+function icon(name) {
+  return `http://openweathermap.org/img/w/${name}.png`
+} 
 
 const Weather = ({ temp, description, icon }) => (
   <div className="bw2 ba blue dib pa3 bg-washed-blue">
@@ -27,15 +58,4 @@ const Weather = ({ temp, description, icon }) => (
   </div>
 );
 
-
-const App = () => (
-  <Weather
-    temp={14.85}
-    description="proximity shower rain"
-    icon="http://openweathermap.org/img/w/10d.png"
-  />
-);
-
-
-
-ReactDOM.render(<App />, document.getElementById('exercise'));
+ReactDOM.render(<WeatherContainer />, document.getElementById('exercise'));
