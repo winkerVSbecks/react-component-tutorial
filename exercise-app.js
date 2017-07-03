@@ -9,8 +9,13 @@ const Weather = ({temp, description, icon}) => (
                 <p className="f3 mv0">{ temp } ℃</p>
             </header>
         </div>
-
         <p className="mv0 f5 ttc">{ description }</p>
+    </div>
+);
+
+const Error = ({error}) => (
+    <div className="bw2 ba blue dib pa3 bg-washed-blue">
+        <p>{error}</p>
     </div>
 );
 
@@ -21,6 +26,7 @@ class WeatherCard extends React.Component {
             temp: '',
             description: '',
             icon: '',
+            error: false,
         };
     }
 
@@ -35,11 +41,22 @@ class WeatherCard extends React.Component {
 
     getWeather() {
         return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
+            .then(response => {
+                if (!response.ok) {
+                    throw (`Error getting weather information: ${response.status}: ${response.statusText}`);
+                }
+                return response;
+            })
             .then(res => res.json())
             .then(WeatherCard.reshapeData)
             .then(res => {
                 this.setState(res);
                 console.log("updated weather"); // for testing
+            })
+            .catch(err => {
+                this.setState({
+                    error: err
+                })
             })
     }
 
@@ -52,14 +69,20 @@ class WeatherCard extends React.Component {
     }
 
     render() {
-        const {icon, temp, description} = this.state;
-        return (
-            <Weather
-                temp={temp}
-                description={description}
-                icon={icon}
-            />
-        );
+        const {icon, temp, description, error} = this.state;
+        if (error) {
+            return (
+                <Error error={error} />
+            )
+        } else {
+                return(
+                    <Weather
+                        temp={temp}
+                        description={description}
+                        icon={icon}
+                    />
+                )
+        }
     }
 }
 
