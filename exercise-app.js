@@ -1,13 +1,29 @@
-const API_KEY = '5cc1f25759881907aed6171543839b19';
+const API_KEY = 'cbde950e8a9a0ff5f7039bc0a8abbe59';
 
 function getWeather() {
   return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
-    .then(res => res.json())
-    .then(reshapeData);
+    .then(res => {
+      if(!res.ok) {
+        throw 'An error occurred!';
+      }
+      console.log('json', res.json())
+      return res.json();
+    })
+    .then(function(data) {
+      let reshapedData = reshapeData(data);
+      console.log('reshapeData: ', reshapedData);
+      this.setState({reshapedData});
+    })
+    .catch(error => console.error(error));
 }
 
-function reshapeData() {
-
+function reshapeData(data) {
+  const newData = {
+    temp: data.main.temp,
+    description: data.weather[0].description,
+    icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+  };
+  return newData;
 }
 
 class Weather extends React.Component {
@@ -40,6 +56,17 @@ class App extends React.Component {
       icon: "http://openweathermap.org/img/w/10d.png",
     }
   }
+
+  componentDidMount () {
+    setInterval(function() {
+      this.getWeather()
+    }, 5000);
+    // const data = setInterval(() => this.getWeather(), 3000);
+    // console.log('this', this);
+    // console.log('data', data)
+    // this.setState({data});
+  }
+
   render() {
     return (
       <Weather
