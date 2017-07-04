@@ -24,30 +24,53 @@ function reshapeData(data) {
       icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
     });
 }
+function getWeather() {
+    return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
+    .then(res => res.json())
+    .then(data => reshapeData(data))
+    .catch(error => console.log(error));
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      temp:null,
-      description:null,
-      icon:null,
+      temp:0,
+      description:"loading",
+      icon: null,
     }
   }
   componentDidMount() {
-    const test = this.getWeather();
+    getWeather()
+    .then(data => {
+        this.setState({
+          temp: data.temp,
+          description: data.description,
+          icon: data.icon
+        });
+      });
+    this.timerID = setInterval(() => {
+      getWeather()
+      .then(data => {
+        this.setState({
+          temp: data.temp,
+          description: data.description,
+          icon: data.icon
+        });
+      });
+    }
+    ,15000);
+    
+  }
+  componentWillUnmount(){
+    clearInterval(this.timerID);
   }
   render() {
     const {temp, description, icon} = this.state;
     // 
     return <Weather temp={temp} description={description} icon={icon} />
   }
-  getWeather() {
-    fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
-    .then(res => res.json())
-    .then(data => this.setState(reshapeData(data)))
-    .catch(error => console.log(error));
-  }
+
 }
 
 
